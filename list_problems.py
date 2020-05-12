@@ -9,7 +9,8 @@ So we try to solve the same set of those small problems in Python. Here are
 the problems related to List.
 """
 
-from itertools import count
+from itertools import count, takewhile, dropwhile, chain
+from functools import reduce
 
 
 
@@ -94,6 +95,62 @@ def lastButOne(it):
 
 
 
+def elementAt(it, n):
+	"""
+	[Iterable] it, [Int] n
+		=> [Object] the nth element of it, if it has at least n elements
+					or raise a ValueError
+
+			n starting from 1, 1 means the first element
+
+	Take out the first (n-1) elements, then take the head of the remaining
+	(potentially infinite) list.
+	"""
+	return head(dropwhile( lambda t: t[0] < n
+					  	 , zip(count(1), it)
+					  	 )
+			   )[1]
+
+
+"""
+# Similar idea, also works
+def elementAt(it, n):
+	return head(filter( lambda t: t[0] >= n
+					  , zip(count(1), it)
+					  )
+			   )[1]
+"""
+
+
+"""
+# Also works: take the first n elements, take the tail of it
+def elementAt(it, n):
+	el = tail(zip(range(1, n+1), it))
+	if el[0] == n:
+		return el[1]
+	else:
+		raise ValueError
+"""
+
+
+
+def reverse(it):
+	"""
+	[Iterable] it => [Iterable] it
+
+	return the reversed list
+
+	How to make it work for string?
+	"""
+	def build(acc, el):
+		return [el] + acc
+
+	return reduce(build, it, [])
+
+
+
+
+
 """
 	[Iterable] it
 		=> [int] number of elements in the iterator, 0 if empty
@@ -128,5 +185,5 @@ def numElements(it):
 
 
 if __name__ == '__main__':
-	print(lastButOne(['a', 'b']))
+	print(head(filter(lambda x: x > 5, count())))
 

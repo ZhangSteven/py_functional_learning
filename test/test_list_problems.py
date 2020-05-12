@@ -2,7 +2,9 @@
 # 
 
 import unittest2
-from py_functional_learning.list_problems import head, tail, numElements
+from itertools import takewhile, count
+from py_functional_learning.list_problems import head, tail, numElements \
+	, elementAt, reverse
 
 
 
@@ -18,6 +20,7 @@ class TestList(unittest2.TestCase):
 		self.assertEqual(1, head(range(1,100)))
 		self.assertEqual('a', head(['a', 'b']))
 		self.assertEqual(3, head(filter(lambda x: x > 2, range(8))))
+		self.assertEqual(0, head(count()))	# infinite list
 
 
 
@@ -53,3 +56,36 @@ class TestList(unittest2.TestCase):
 		self.assertEqual(0, numElements(filter(lambda x: x > 5, range(4))))
 		self.assertEqual(1, numElements(['a']))
 		self.assertEqual(5, numElements('abcde'))
+
+
+
+	def testElementAt(self):
+		self.assertEqual('a', elementAt('abc', 1))
+		self.assertEqual(2, elementAt(range(3), 3))
+		self.assertEqual(5, elementAt(count(1), 5))	# infinite list
+
+
+
+	def testElementAtError(self):
+		try:
+			elementAt([], 1)
+		except ValueError:
+			pass	# expected
+		else:
+			self.fail('something goes wrong')
+
+
+		try:
+			elementAt([1, 2], 3)
+		except ValueError:
+			pass	# expected
+		else:
+			self.fail('something goes wrong')
+
+
+
+	def testReverse(self):
+		self.assertEqual([], reverse([]))
+		self.assertEqual('a', reverse('a'))
+		self.assertEqual( [3, 2, 1]
+						, list(reverse(takewhile(lambda x: x < 4, count(1)))))
