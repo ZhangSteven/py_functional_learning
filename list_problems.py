@@ -9,6 +9,10 @@ So we try to solve the same set of those small problems in Python. Here are
 the problems related to List.
 """
 
+from itertools import count
+
+
+
 def head(it):
 	"""
 	[Iterable] it 
@@ -56,6 +60,22 @@ def tail(it):
 """
 
 
+"""
+# This version doesn't work. It's because when we nest next() and iter() calls, it
+# causes an infinite loop.
+# 
+def tail(it):
+	try:
+		while(True):
+			el = next(iter(it))
+	except StopIteration:
+		try:
+			return el
+		except UnboundLocalError:
+			raise ValueError
+"""
+
+
 
 def lastButOne(it):
 	"""
@@ -88,26 +108,22 @@ numElements = lambda it: sum(map(lambda _: 1, it))
 def numElements(it):
 
 	try:
-		return tail(enumerate(it))[0] + 1
+		return tail(zip(count(1), it))[0]
 	except ValueError:	# empty list
 		return 0
 """
 
 
 """
-# This version doesn't work. It's because when we nest next() and iter() calls, it
-# causes an infinite loop.
-# 
-def tail(it):
+# Also works
+def numElements(it):
+
 	try:
-		while(True):
-			el = next(iter(it))
-	except StopIteration:
-		try:
-			return el
-		except UnboundLocalError:
-			raise ValueError
+		return tail(enumerate(it))[0] + 1
+	except ValueError:	# empty list
+		return 0
 """
+
 
 
 
