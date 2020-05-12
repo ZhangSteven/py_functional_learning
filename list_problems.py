@@ -21,6 +21,23 @@ def head(it):
 
 
 
+def tail(it):
+	"""
+	[Iterable] it
+		=> [Object] The last element of it, or raise ValueError if it is empty
+	"""
+	iterator = iter(it)
+	try:
+		while(True):
+			el = next(iterator)
+	except StopIteration:
+		try:
+			return el
+		except UnboundLocalError:	# el not assigned, meaning it is empty
+			raise ValueError
+
+
+
 """
 # This version also works
 # 
@@ -40,20 +57,28 @@ def tail(it):
 
 
 
-def tail(it):
+def lastButOne(it):
 	"""
-	[Iterable] it
-		=> [Object] The last element of it, or raise ValueError if it is empty
+	[Iterable] it 
+		=> [Object] the next to the last element of it or raise ValueError
+			if it has less than 2 elements
 	"""
+	def pairs(first, it):
+		for el in it:
+			yield (first, el)
+			first = el
+
+
 	iterator = iter(it)
-	try:
-		while(True):
-			el = next(iterator)
-	except StopIteration:
-		try:
-			return el
-		except UnboundLocalError:	# el not assigned, meaning it is empty
-			raise ValueError
+	return tail(pairs(head(iterator), iterator))[0]
+
+
+
+"""
+	[Iterable] it
+		=> [int] number of elements in the iterator, 0 if empty
+"""
+numElements = lambda it: sum(map(lambda _: 1, it))
 
 
 
@@ -67,15 +92,6 @@ def numElements(it):
 	except ValueError:	# empty list
 		return 0
 """
-
-
-
-"""
-	[Iterable] it
-		=> [int] number of elements in the iterator, 0 if empty
-"""
-numElements = lambda it: sum(map(lambda _: 1, it))
-
 
 
 """
@@ -96,5 +112,5 @@ def tail(it):
 
 
 if __name__ == '__main__':
-	print(numElements(['a']))
+	print(lastButOne(['a', 'b']))
 
