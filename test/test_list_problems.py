@@ -4,7 +4,7 @@
 import unittest2
 from itertools import takewhile, count
 from py_functional_learning.list_problems import head, tail, numElements \
-	, elementAt, reverse
+	, firstNelements, elementAt, reverse
 
 
 
@@ -59,6 +59,15 @@ class TestList(unittest2.TestCase):
 
 
 
+	def testFirstNelements(self):
+		self.assertEqual([], list(firstNelements([], 2)))
+		self.assertEqual([1], list(firstNelements([1], 2)))
+		self.assertEqual([0, 1], list(firstNelements(range(5), 2)))
+		self.assertEqual(['a'], list(firstNelements('abc', 1)))
+		self.assertEqual([0, 1, 2], list(firstNelements(count(), 3)))
+
+
+
 	def testElementAt(self):
 		self.assertEqual('a', elementAt('abc', 1))
 		self.assertEqual(2, elementAt(range(3), 3))
@@ -87,5 +96,6 @@ class TestList(unittest2.TestCase):
 	def testReverse(self):
 		self.assertEqual([], reverse([]))
 		self.assertEqual('a', reverse('a'))
+		self.assertEqual('ab c', reverse('c ba'))
 		self.assertEqual( [3, 2, 1]
-						, list(reverse(takewhile(lambda x: x < 4, count(1)))))
+						, reverse(takewhile(lambda x: x < 4, count(1))))

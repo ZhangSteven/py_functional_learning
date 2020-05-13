@@ -95,6 +95,16 @@ def lastButOne(it):
 
 
 
+def firstNelements(it, n):
+	"""
+	[Iterable] it
+		=> [Iterable] it, an iterable object on the first N elements of it (if
+			it has at least N elements), or all elemtns in it.
+	"""
+	return map(lambda x: x[1], zip(range(n), it))
+
+
+
 def elementAt(it, n):
 	"""
 	[Iterable] it, [Int] n
@@ -112,6 +122,7 @@ def elementAt(it, n):
 			   )[1]
 
 
+
 """
 # Similar idea, also works
 def elementAt(it, n):
@@ -124,6 +135,9 @@ def elementAt(it, n):
 
 """
 # Also works: take the first n elements, take the tail of it
+# Note that tail(firstNelements(it, n)) does not work, because firstNelements()
+# may not contain N elements.
+# 
 def elementAt(it, n):
 	el = tail(zip(range(1, n+1), it))
 	if el[0] == n:
@@ -140,12 +154,14 @@ def reverse(it):
 
 	return the reversed list
 
-	How to make it work for string?
+	Note that if the input is a string, then we need to return a string rather
+	than a map object.
 	"""
 	def build(acc, el):
 		return [el] + acc
 
-	return reduce(build, it, [])
+	result = reduce(build, it, [])
+	return ''.join(result) if isinstance(it, str) else result
 
 
 
